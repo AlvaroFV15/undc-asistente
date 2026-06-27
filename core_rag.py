@@ -8,6 +8,7 @@ from langchain_pinecone import PineconeVectorStore
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import StrOutputParser
 import time 
+from datetime import datetime
 
 # Cargar variables de entorno del archivo .env
 load_dotenv()
@@ -137,6 +138,15 @@ def responder_pregunta_undc(pregunta: str) -> dict:
         nombre_archivo = os.path.basename(doc.metadata.get("source", "Reglamento"))
         pagina = doc.metadata.get("page", 0) + 1
         fuentes.append(f"{nombre_archivo} (Pág. {pagina})")
+    
+      # ─── REGISTRO DE EJECUCIÓN (LOG DE AUDITORÍA) ───────────────────
+    # Esto imprimirá un log estructurado en la consola de Docker
+    timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    print(f"\n[AUDIT LOG - {timestamp}]")
+    print(f"Pregunta del Estudiante: '{pregunta}'")
+    print(f"Fuentes Consultadas: {list(set(fuentes))}")
+    print(f"Longitud de Respuesta: {len(respuesta_texto)} caracteres.")
+    print(f"─────────────────────────────────────────────────────────\n")
 
     return {
         "respuesta": respuesta_texto,
