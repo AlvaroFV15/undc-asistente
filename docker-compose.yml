@@ -1,0 +1,14 @@
+version: '3.8'
+
+services:
+  undc-asistente:
+    build: .
+    container_name: undc_asistente_app
+    ports:
+      - "8501:8501"
+    env_file:
+      - .env
+    volumes:
+      - ./documentos:/app/documentos
+      - ./faiss_db:/app/faiss_db
+    restart: always
